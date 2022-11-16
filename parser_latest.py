@@ -12,23 +12,16 @@ html = response.content
 soup = BeautifulSoup(html, "html.parser")
 latest_reports = soup.find_all(class_="jrResourceContent")
 
-def page_counter():
-    pageNum = 1
-    return str(pageNum)
+def return_sublist(list): # takes list, returns each item of sublist of list as a string
+    for sublist in list:
+        for string in sublist:
+            yield string * len(sublist)
 
-def return_multiple():
-    return [1,2,3,4,5,6,7]
-
-
-# придется чото думать с кортежами:
-'''def show_latest(source, page):
-    latest_movies = []
-
-    # page_counter = 1
-    # movie_counter = 0
+def show_latest(source, page):
+    latest_releases = [] # list of last 5 movie releases, each release is a list itself
 
     for report in latest_reports:
-        movie = tuple()
+        movie = [] # last movie release as a list of 7 items (5 text and 2 URLs)
 
         report_name = report.find(class_="jrResourceTitle")
         report_movie = report.find(class_="jrResourceListingTitle")
@@ -49,10 +42,13 @@ def return_multiple():
         else:
             movie.append(report_description.get_text().strip('\n'))
         
-        latest_movies.append(movie)
-    
-    for movie in latest_movies:
-        return movie
+        latest_releases.append(movie)
 
-print(show_latest(url, page))'''
+    return latest_releases
+
+latest_movies = show_latest(url, page)
+movie_surfer = return_sublist(latest_movies)
+
+print(next(movie_surfer))
+print(next(movie_surfer))
 
